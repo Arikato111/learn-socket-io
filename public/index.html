@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>socket io</title>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <div>
+      <div id="root"></div>
+      <form onsubmit="sendMessage()">
+        <input id="message" type="text" /><button>say hi</button>
+      </form>
+    </div>
+    <script>
+      const message = document.getElementById("message");
+      const root = document.getElementById("root");
+      const div = document.createElement("div");
+      root.appendChild(div);
+
+      var socket = io();
+
+      socket.on("put-message", (data) => {
+        let div_msg = document.createElement("div");
+        div_msg.innerText = data;
+        div.append(div_msg);
+        if (data == "clear") div.innerText = "";
+      });
+
+      function sendMessage() {
+        socket.emit("message", message.value);
+        message.value = "";
+      }
+    </script>
+  </body>
+</html>
